@@ -2,8 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #fb5607;
-  color:#fff;
+ 
 }
 
 @font-face{
@@ -14,12 +13,73 @@
 }
 
 body{
+
   font-family: "B-NAZANIN";
+  
   
 }
 
 
 .App{
- text-align: center;
+
+
+
+ .taskBg{
+    background-color: #555;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    padding:10px 15px 10px 140px;
+    margin: 10px;
+    text-align: right;
+    font-size: 22px;
+    position: relative;
+   .done{
+
+    .taskText{
+      text-decoration: line-through;
+      opacity: 0.3; 
+      background: #000;
+    }
+    .taskText{
+      flex: 1;
+
+
+      
+    }
+
+   }
+   .taskNumber{
+    color:#999;
+    border: 1px solid #999;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    font-size: 14px;
+    margin-left: 12px;
+    padding-top: 3px;
+    align-items: center;
+    justify-content: center;
+  }
+  .iconWrap{
+    position: absolute;
+    top:50%;
+    left:15px;
+    transform: translateY(-50%);
+    width: auto;
+    display:inline-block;
+
+    span{
+      display: inline-block;
+      margin: 0px 10px;
+      cursor: pointer;
+      color: #2dc653;
+
+      &:hover{
+        color: #f9c74f;
+      }
+    }
+  }
+ }
   
 }
