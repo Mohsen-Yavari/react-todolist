@@ -1,0 +1,25 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #fb5607;
+  color:#fff;
+}
+
+@font-face{
+
+  font-family: "B-NAZANIN";
+  src:local("B-NAZANIN"),url(./font//B-NAZANIN.TTF);
+
+}
+
+body{
+  font-family: "B-NAZANIN";
+  
+}
+
+
+.App{
+ text-align: center;
+  
+}
