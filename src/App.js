@@ -5,7 +5,7 @@ function App() {
   // Todolist State
   const [toDo,setTodo] = useState([
     {"id":1,"title":" کار1","status":false},
-    {"id":1,"title":" کار2","status":false},
+    {"id":2,"title":" کار2","status":false},
   ]); 
 
   const [newTask,setNewTask] = useState("");
@@ -13,27 +13,46 @@ function App() {
 
   //Add task
   const addTask = () => {
-
+    if(newTask) {
+      let num = toDo.length + 1;
+      let newEntry = {id:num,title:newTask,status:false};
+      setTodo([...toDo,newEntry]);
+      setNewTask("");
+    }
   }
 
   //Delet task
   const deleteTask = (id) => {
+    let newTasks = toDo.filter(task => task.id !==id);
+    setTodo(newTasks);
 
   }
 
   //MarkDone task
   const markDone = (id) => {
-
+      let newTask = toDo.map(task =>{
+        if( task.id === id) {
+          return ({...task,status: !task.status})
+        }
+        return task;
+      });
+      setTodo(newTask);
   }
 
   //Cancele update
   const cancelUpdate = () => {
+    setUpdateDate('');
 
   }
 
   //Change task for update
   const changeTask  = (e) => {
-
+    let newAntry ={
+      id: updateDate.id,
+      title: e.target.value,
+      status: updateDate.status ? true : false
+    }
+    setUpdateDate(newAntry);
   }
 
   //Update task
@@ -50,7 +69,20 @@ function App() {
         {/* update task */}
         <div className="row">
           <div className="col">
-            
+          <input
+          value={updateDate && updateDate.title}
+          onChange={ (e)=>changeTask(e)}
+           className="form-control form-control-lg" />
+          </div>
+          <div className="col-auto">
+            <button 
+            onClick={ updateTask}
+            className="btn btn-lg btn-success mb-20">
+              اپدیت
+            </button>
+            <button className="btn btn-lg btn-warning text-light  mb-20">
+              کنسل
+            </button>
           </div>
         </div>
 
@@ -58,17 +90,22 @@ function App() {
         {/* add task */}
         <div className="row">
           <div className="col">
-            <input className="form-control form-control-lg" />
+            <input 
+            value={newTask}
+            onChange={ (e) => setNewTask(e.target.value)}
+            className="form-control form-control-lg" />
           </div>
           <div className="col-auto">
-            <button className="btn btn-lg btn-success">
+            <button 
+            onClick={addTask}
+            className="btn btn-lg btn-success">
               اضافه کردن
             </button>
           </div>
         </div>
 
         {/* Show toDos */}
-        {toDo && toDo.length ? "" : "...چیزی وجود ندارد"}
+        {toDo && toDo.length ? "" : " چییزی وجود ندارد ..."}
           
         {toDo && toDo
         .sort((a, b) => a.id > b.id ? 1 : -1)
@@ -84,14 +121,32 @@ function App() {
                   </div>
                   <div className="iconWrap">
 
-                    <span title="تایید" >
-                      <i  class="ri-checkbox-circle-fill"></i>
+                    <span 
+                    onClick={ (e)=> markDone(task.id)}
+                    title="تایید " >
+                     <i className="ri-checkbox-circle-fill" />
+
                     </span>
-                    <span title="ویرایش">
-                      <i class="ri-pencil-line"></i>
-                    </span>
-                    <span title="حذف">
-                      <i class="ri-delete-bin-line"></i>
+                    {task.status ? null : (
+                      
+                       <span 
+                        onClick={ () => setUpdateDate({
+                        id : task.id,
+                        status: task.status ? true : false
+                        })}
+                       title="ویرایش">
+                       <i className="ri-pencil-line" />
+ 
+                     </span>
+                    )}
+                   
+                    <span 
+                    onClick={() => deleteTask(task.id)}
+                    title="حذف"
+                    
+                    >
+                    <i className="ri-delete-bin-line" />
+
                     </span>
                   </div>
 
