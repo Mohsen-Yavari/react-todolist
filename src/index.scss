@@ -22,10 +22,17 @@ body{
 
 .App{
 
+  background:#0d3f67;
 
+  h2{
+    margin-bottom: 100px;
+    color:#e0e3df;
+    font-weight: bold;
+    font-size: 2em;
+  }
 
  .taskBg{
-    background-color: #555;
+    background-color: #6b48ff;
     border-radius: 7px;
     margin-bottom: 20px;
     padding:10px 15px 10px 140px;
@@ -35,8 +42,9 @@ body{
     position: relative;
 
     &:hover{
+      -webkit-box-shadow: 0px 0px 34px 12px rgba(0,0,0,0.24); 
+      box-shadow: 0px 0px 34px 12px rgba(0,0,0,0.24);
       
-
       
     }
    .done{
@@ -44,7 +52,7 @@ body{
     .taskText{
       text-decoration: line-through;
       opacity: 0.3; 
-      background: #000;
+     
     }
     .taskText{
       flex: 1;
@@ -79,10 +87,10 @@ body{
       display: inline-block;
       margin: 0px 10px;
       cursor: pointer;
-      color: #2dc653;
+      color: #1ee3cf;
 
       &:hover{
-        color: #f9c74f;
+        color: #f29c2b;
       }
     }
   }

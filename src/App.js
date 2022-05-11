@@ -1,15 +1,30 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
+import AddTaskForm from "./components/AddTaskForm";
+import UpdateForm from "./components/UpdateForm";
+
+    // Add data to localStorage
+    const getLocalStotage = () =>{
+        let toDo = localStorage.getItem("todo");
+        if (toDo) {
+          return (toDo = JSON.parse(localStorage.getItem("todo")))
+        } else {
+          return [];
+        }
+    }
 
 function App() {
 
   // Todolist State
-  const [toDo,setTodo] = useState([
-    {"id":1,"title":" کار1","status":false},
-    {"id":2,"title":" کار2","status":false},
-  ]); 
+  const [toDo,setTodo] = useState(getLocalStotage()); 
 
   const [newTask,setNewTask] = useState("");
   const [updateData,setUpdateData] = useState("");
+
+  // useEffect for localStorage
+  useEffect(()=> {
+    localStorage.setItem("todo",JSON.stringify(toDo));
+  },[toDo]);
+
 
   //Add task
   const addTask = () => {
@@ -20,6 +35,8 @@ function App() {
       setNewTask("");
     }
   }
+
+
 
   //Delet task
   const deleteTask = (id) => {
@@ -58,127 +75,98 @@ function App() {
   //Update task
   const updateTask = () => {
     let filterRecords = [...toDo].filter( task => task.id !== updateData.id );
-    let updatedObject = [...filterRecords, updateData]
+    let updatedObject = [...filterRecords, updateData];
     setTodo(updatedObject);
     setUpdateData('');
   }
 
 
 
+
   return (
-    <div className="container bg-dark text-light w-100 text-center p-5 vh-100 App">
+    <div className="container text-light w-100 text-center p-5 vh-100 App">
         <br /><br />
         <h2>لیست انجام کارها</h2>
-        <br /><br />
+       
 
         {/* update task */}
 
         {updateData && updateData ? (
-          <>
-             <div className="row">
-                <div className="col">
-                <input
-                value={updateData && updateData.title}
-                onChange={ (e)=>changeTask(e)}
-                className="form-control form-control-lg" />
-                </div>
-                <div className="col-auto">
-                  <button 
-                  onClick={updateTask}
-                  className="btn btn-lg btn-success mb-20">
-                    اپدیت
-                  </button>
-                  <button 
-                  onClick={cancelUpdate}
-                  className="btn btn-lg btn-warning text-light  mb-20">
-                    کنسل
-                  </button>
-                </div>
-              </div>
-              <br />
-          </>
+         <UpdateForm 
+         updateData={updateData}
+         changeTask={changeTask}
+         updateTask={updateTask}
+         cancelUpdate={cancelUpdate}
+         />
         ) : (
-            <>
-               {/* add task */}
-              <div className="row">
-                <div className="col">
-                  <input 
-                  value={newTask}
-                  onChange={ (e) => setNewTask(e.target.value)}
-                  className="form-control form-control-lg" />
-                </div>
-                <div className="col-auto">
-                  <button 
-                  onClick={addTask}
-                  className="btn btn-lg btn-success">
-                    اضافه کردن
-                  </button>
-                </div>
-              </div>
-              <br />
-
-            </>
-        )};
+         
+            <AddTaskForm 
+            newTask={newTask}
+            setNewTask={setNewTask}
+            addTask={addTask}
+            />
+        )}
        
 
 
        
         {/* Show toDos */}
-        {toDo && toDo.length ? "" : " چییزی وجود ندارد ..."}
+        {toDo && toDo.length ? "" : " تسکی وجود ندارد"}
           
         {toDo && toDo
-        .sort((a, b) => a.id > b.id ? 1 : -1)
-        .map( (task,index) => {
-            return(
-              <React.Fragment key={task.id}>
+                    .sort((a, b) => a.id > b.id ? 1 : -1)
+                    .map( (task,index) => {
+                    return(
+                    <React.Fragment key={task.id}>
 
-                <div className="col taskBg">
+                        <div className="col taskBg">
 
-                  <div className={task.status ? "done" : ""}>
-                    <span className="taskNumber">{index + 1}</span>
-                    <span className="taskText">{task.title}</span>
-                  </div>
-                  <div className="iconWrap">
+                        <div className={task.status ? "done" : ""}>
+                            <span className="taskNumber">{index + 1}</span>
+                            <span className="taskText">{task.title}</span>
+                        </div>
+                        <div className="iconWrap">
 
-                    <span 
-                    onClick={ (e)=> markDone(task.id)}
-                    title="تایید " >
-                     <i className="ri-checkbox-circle-fill" />
+                            <span 
+                            onClick={ (e)=> markDone(task.id)}
+                            title="تایید " >
+                            <i className="ri-checkbox-circle-fill" />
 
-                    </span>
-                    {task.status ? null : (
-                      
-                       <span 
-                        onClick={ () => setUpdateData({
-                        id: task.id,
-                        title:task.title,
-                        status: task.status ? true : false
-                        })}
-                       title="ویرایش">
-                       <i className="ri-pencil-line" />
- 
-                     </span>
-                    )}
-                   
-                    <span 
-                    onClick={() => deleteTask(task.id)}
-                    title="حذف"
+                            </span>
+                            {task.status ? null : (
+                            
+                            <span 
+                                onClick={ () => setUpdateData({
+                                id: task.id,
+                                title:task.title,
+                                status: task.status ? true : false
+                                })}
+                            title="ویرایش">
+                            <i className="ri-pencil-line" />
+        
+                            </span>
+                            )}
+                        
+                            <span 
+                            onClick={() => deleteTask(task.id)}
+                            title="حذف"
+                            
+                            >
+                            <i className="ri-delete-bin-line" />
+
+                            </span>
+                        </div>
+
+                        </div>
                     
-                    >
-                    <i className="ri-delete-bin-line" />
-
-                    </span>
-                  </div>
-
-                </div>
-               
-              </React.Fragment>
-            )
-        })
-        }
+                    </React.Fragment>
+                    )
+                })
+                }
+                
         
     </div>
-  );
-}
+  )
+};
 
 export default App;
