@@ -9,7 +9,7 @@ function App() {
   ]); 
 
   const [newTask,setNewTask] = useState("");
-  const [updateDate,setUpdateDate] = useState("");
+  const [updateData,setUpdateData] = useState("");
 
   //Add task
   const addTask = () => {
@@ -41,24 +41,29 @@ function App() {
 
   //Cancele update
   const cancelUpdate = () => {
-    setUpdateDate('');
+    setUpdateData('');
 
   }
 
   //Change task for update
   const changeTask  = (e) => {
     let newAntry ={
-      id: updateDate.id,
+      id: updateData.id,
       title: e.target.value,
-      status: updateDate.status ? true : false
+      status: updateData.status ? true : false
     }
-    setUpdateDate(newAntry);
+    setUpdateData(newAntry);
   }
 
   //Update task
-  const updateTask  = () => {
-
+  const updateTask = () => {
+    let filterRecords = [...toDo].filter( task => task.id !== updateData.id );
+    let updatedObject = [...filterRecords, updateData]
+    setTodo(updatedObject);
+    setUpdateData('');
   }
+
+
 
   return (
     <div className="container bg-dark text-light w-100 text-center p-5 vh-100 App">
@@ -67,43 +72,57 @@ function App() {
         <br /><br />
 
         {/* update task */}
-        <div className="row">
-          <div className="col">
-          <input
-          value={updateDate && updateDate.title}
-          onChange={ (e)=>changeTask(e)}
-           className="form-control form-control-lg" />
-          </div>
-          <div className="col-auto">
-            <button 
-            onClick={ updateTask}
-            className="btn btn-lg btn-success mb-20">
-              اپدیت
-            </button>
-            <button className="btn btn-lg btn-warning text-light  mb-20">
-              کنسل
-            </button>
-          </div>
-        </div>
+
+        {updateData && updateData ? (
+          <>
+             <div className="row">
+                <div className="col">
+                <input
+                value={updateData && updateData.title}
+                onChange={ (e)=>changeTask(e)}
+                className="form-control form-control-lg" />
+                </div>
+                <div className="col-auto">
+                  <button 
+                  onClick={updateTask}
+                  className="btn btn-lg btn-success mb-20">
+                    اپدیت
+                  </button>
+                  <button 
+                  onClick={cancelUpdate}
+                  className="btn btn-lg btn-warning text-light  mb-20">
+                    کنسل
+                  </button>
+                </div>
+              </div>
+              <br />
+          </>
+        ) : (
+            <>
+               {/* add task */}
+              <div className="row">
+                <div className="col">
+                  <input 
+                  value={newTask}
+                  onChange={ (e) => setNewTask(e.target.value)}
+                  className="form-control form-control-lg" />
+                </div>
+                <div className="col-auto">
+                  <button 
+                  onClick={addTask}
+                  className="btn btn-lg btn-success">
+                    اضافه کردن
+                  </button>
+                </div>
+              </div>
+              <br />
+
+            </>
+        )};
+       
 
 
-        {/* add task */}
-        <div className="row">
-          <div className="col">
-            <input 
-            value={newTask}
-            onChange={ (e) => setNewTask(e.target.value)}
-            className="form-control form-control-lg" />
-          </div>
-          <div className="col-auto">
-            <button 
-            onClick={addTask}
-            className="btn btn-lg btn-success">
-              اضافه کردن
-            </button>
-          </div>
-        </div>
-
+       
         {/* Show toDos */}
         {toDo && toDo.length ? "" : " چییزی وجود ندارد ..."}
           
@@ -130,8 +149,9 @@ function App() {
                     {task.status ? null : (
                       
                        <span 
-                        onClick={ () => setUpdateDate({
-                        id : task.id,
+                        onClick={ () => setUpdateData({
+                        id: task.id,
+                        title:task.title,
                         status: task.status ? true : false
                         })}
                        title="ویرایش">
